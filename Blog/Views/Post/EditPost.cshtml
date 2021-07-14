@@ -1,0 +1,166 @@
+﻿<!--Model: Id, CategoryId, Categories, Name, Content, File, Date, Description, FileNames -->
+@model Blog.Models.EditPost
+<!-- Tab name -->
+@{
+    ViewData["Title"] = "Update Post";
+}
+<!-- JS: countSymbolsOfTitle, countSymbolsOfDescription -->
+<script src="~/js/post.js"></script>
+<!-- Styles: #content, #description, #coverImage -->
+<link rel="stylesheet" href="~/css/PersonalArea.css" />
+
+<!-- Edit post. Modal popup window with form -->
+<div class="card my-5">
+    <div class="card-body">
+        <form asp-action="UpdatePost" asp-controller="Post" method="post" enctype="multipart/form-data">
+            <!--PostId-->
+            <input asp-for="Id" type="hidden" />
+            <!--Date-->
+            <input asp-for="Date" type="hidden" />
+            <!--Image-->
+            <input asp-for="Image" type="file" class="form-control-file" />
+            <!-- Files -->
+            <label asp-for="Files" class="my-3">Files</label>
+            <input asp-for="Files" type="file" multiple class="form-control-file">
+            <div class="my-3">Files saved:</div>
+            <ol>
+                @foreach (var fileName in Model.FileNames)
+                {
+                    <li>
+                        @fileName 
+                        <a asp-action="DeleteFile" asp-controller="Post" asp-route-fileName="@(fileName)" asp-route-postId="@(Model.Id)">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </li>
+                }
+            </ol>
+            <!--Category-->
+            <div class="form-group my-3">
+                <label asp-for="Categories">Category</label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+            </div>
+            <!--Title-->
+            <div class="form-group my-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Name">Title</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input asp-for="Name" class="form-control" onkeyup="countSymbolsOfTitle(this)" id="title" />
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col subtext">
+                        Remaining <span id="amountOfSymbolsOfTitle">0</span> of 200 symbols
+                    </div>
+                </div>
+            </div>
+            <!-- Description-->
+            <div class="form-group my-3">
+                <div class="row">
+                    <div class="col">
+                        <label asp-for="Description">Description</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <textarea asp-for="Description" class="form-control" id="description" onkeyup="countSymbolsOfDescription(this)"></textarea>
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col subtext">
+                        Remaining <span id="amountOfSymbolsOfDescription">0</span> of 800 symbols
+                    </div>
+                </div>
+            </div>
+            <!--Content-->
+            <div class="form-group my-3">
+                <label asp-for="Content">Content</label>
+                <textarea asp-for="Content" class="form-control" id="content"></textarea>
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+            <!-- Markdown buttons -->
+            <div class="row my-2">
+                <div class="col-sm">
+                    <button type="button" value=" # " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Heading 1</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" ## " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Heading 2</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" ### " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Heading 3</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #### " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Heading 4</button>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-sm">
+                    <button type="button" value=" #p[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Paragraph</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #nl " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">New Line</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #l " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Line</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #c[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Code</button>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-sm">
+                    <button type="button" value=" []() " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Link</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #tw[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Bold</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #ti[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Italic</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #ts[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Strikethrough</button>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-sm">
+                    <button type="button" value=" #i[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Image</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #a[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Audio</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #v[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Video</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #f[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">File</button>
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-sm">
+                    <button type="button" value=" #ty[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Yellow</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #tg[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Green</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #tb[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Grey</button>
+                </div>
+                <div class="col-sm">
+                    <button type="button" value=" #tr[] " onclick="addElementOnPage(this.value)" class="btn btn-light w-100">Red</button>
+                </div>
+            </div>
+            <!--Save and Cancel-->
+            <div class="row text-right my-5">
+                <div class="col-sm">
+                    <button type="submit" class="btn btn-primary px-4 py-2 mx-2">Save</button>
+                    <a asp-action="Index" asp-controller="PersonalArea" class="btn btn-secondary px-4 py-2 mx-2">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

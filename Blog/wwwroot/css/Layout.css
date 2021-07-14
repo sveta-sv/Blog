@@ -1,0 +1,42 @@
+﻿/* Mobile screen */
+@media screen and (max-width: 575px) {
+    .menu a {
+        display: block;
+        background-color:white;
+        border-block: solid 1px #f2f2f2;
+    }
+    .menu a:hover{
+        background-color: #f2f2f2;
+        text-decoration:none;
+    }
+    a{
+        padding:20px;
+    }
+    .desktopMenu{
+        display:none;
+    }
+    .separator{
+        display:none;
+    }
+}
+
+/* Tablet screen */
+@media screen and (min-width: 576px) {
+    .menu {
+        display: inline-block;
+    }
+    .modileMenu{
+        display:none;
+    }
+}
+
+/* Title of the Blog*/
+h1{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Data about post */
+.subtext{
+    font-size:14px;
+    color:dimgrey;
+}

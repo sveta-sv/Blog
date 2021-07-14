@@ -1,0 +1,118 @@
+﻿<!-- Namespace of the Markdown language -->
+@using Westwind.AspNetCore.Markdown
+<!-- Namespace for working with the user data -->
+@using Microsoft.AspNetCore.Identity
+<!--Model: PostId, PostTitle, PostContent, Comments, Comment -->
+@model Blog.Models.ReadPost
+<!-- APIs for user sign in. -->
+@inject SignInManager<ApplicationUser> SignInManager
+<!-- Shared components and tab name -->
+@{
+    ViewData["Title"] = "Post";
+    Layout = "_Layout";
+}
+
+<!-- Read post. Full content and comments of the post. Formatting text by markdown language -->
+<content>
+    <div class="card m-3">
+        <div class="card-body">
+            <h6 class="display-4 text-secondary text-center">
+                <!-- Title of the post -->
+                @Model.PostTitle
+            </h6>
+            
+            <div class="text-justify p-3" id="demo1">
+                <!-- Content of the post -->
+                @Markdown.ParseHtmlString(Model.PostContent)
+            </div>
+            <div class="text-center">
+                <!-- Button go back to Home page -->
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Go back</a>
+            </div>
+            <!-- User is logged -->
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <!-- Add comment -->
+                <form asp-action="SaveComment" asp-controller="Home" method="post">
+                    <div class="my-5">
+                        <div class="row">
+                            <div class="col">
+                                <!-- Save post's id -->
+                                <input asp-for="Comment.PostId" value="@Model.PostId" type="hidden" />
+                                <!-- Save text of the comment -->
+                                <textarea asp-for="Comment.Text" class="form-control" placeholder="Your comment ..."></textarea>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col text-right">
+                                <!-- Button send comment -->
+                                <button type="submit" class="btn btn-primary text-right">Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <!-- User is not logged -->
+                <div class="my-5">
+                    <div class="row">
+                        <div class="col">
+                            <!-- Go to LogIn -->
+                            <p> Please <a asp-action="Login" asp-controller="Account">LogIn</a> first. </p>
+                            <!-- Disabled textarea for the comment -->
+                            <textarea class="form-control" placeholder="Your comment ..." disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col text-right">
+                            <!-- Disabled button send comment -->
+                            <button class="btn btn-primary text-right" disabled>Comment</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div>
+                <!-- Show all comments -->
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="card my-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-sm-6 subtext">
+                                    <!-- Author of the comment -->
+                                    Author: @comment.User.Nickname
+                                </div>
+                                <div class="col-sm subtext">
+                                    <!-- Date the comment -->
+                                    Published: @comment.Date.ToString("MM/dd/yyyy")
+                                </div>
+                                <!-- User is logged -->
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <!-- Id of logged user corresponds to user's id that published the comment  -->
+                                    @if (User.Identity.GetUserId() == comment.UserId)
+                                    {
+                                        <a asp-action="DeleteComment" asp-controller="Home" asp-route-commentId="@(comment.Id)">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <!-- Id of logged user is different to user's id that published the comment  -->
+                                        <i class="bi bi-trash" hidden></i>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Text of the comment -->
+                            @comment.Text
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</content>
+

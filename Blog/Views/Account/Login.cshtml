@@ -1,0 +1,27 @@
+﻿<!--Model: Email, Password, RememberMe -->
+@model Blog.Models.LoginAccount
+<!-- Tab name -->
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Login: form to enter to the account -->
+<div class="row my-5">
+    <div class="col">
+        <form asp-action="LoginUser" asp-controller="Account" method="post">
+            <!-- Email -->
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <!-- Password -->
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class=" btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>

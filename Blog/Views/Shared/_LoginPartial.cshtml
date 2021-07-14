@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <!-- Menu of PersonalArea page -->
+    <div class="menu">
+        <a asp-action="Index" asp-controller="Home">Home</a>
+        <span class="separator text-primary mx-3">|</span>
+        <a asp-action="Index" asp-controller="PersonalArea">Hello, @User.Identity.GetNickname()!</a>
+        <span class="separator text-primary mx-3">|</span>
+        <a asp-action="Logout" asp-controller="Account">Logout</a>
+    </div>
+}
+else
+{
+    <!-- Menu of Home page -->
+    <div class="menu">
+        <a asp-action="Login" asp-controller="Account">Login</a>
+        <span class="separator text-primary mx-3">|</span>
+        <a asp-action="Register" asp-controller="Account">Registration</a>
+    </div>
+}

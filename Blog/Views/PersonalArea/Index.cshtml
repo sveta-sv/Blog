@@ -1,0 +1,134 @@
+﻿<!--Model: Posts, UserPosts, Categories -->
+@model Blog.Models.ListPosts
+<!-- Shared components and tab name -->
+@{
+    ViewData["Title"] = "Personal Area";
+    Layout = "_Layout";
+}
+<!-- Styles: #content, #description, #coverImage -->
+<link rel="stylesheet" href="~/css/PersonalArea.css" />
+
+<!-- Personal area: fields for searching, posts with buttons edit and delete -->
+<content>
+    <form asp-action="Index" asp-controller="PersonalArea" method="get" class="my-4">
+        <div class="row">
+            <div class="col-sm-6">
+                <!-- Filtering by category -->
+                <select name="categoryOfPost" class="form-control my-2">
+                    <option value="">Category</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <!option value="@(category.Value)" @((string)ViewData["FilterByCategory"] == category.Value ? "selected" : "")>@category.Text</!option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm">
+                <!-- Filtering by date -->
+                <input name="dateOfPost" type="date" value="@ViewData["FilterByDate"]" class="form-control my-2" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <!-- Filtering by title -->
+                <input name="titleOfPost" type="text" class="form-control my-2" value="@ViewData["FilterByTitle"]" placeholder="Title" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <!-- Button search -->
+                <button type="submit" class="btn btn-primary px-4 py-2 my-2 w-100">Search</button>
+            </div>
+            <div class="col-sm-4">
+                <!-- Button reset -->
+                <a asp-action="Index" asp-controller="PersonalArea" class="btn btn-primary px-4 py-2 my-2 w-100">Reset</a>
+            </div>
+            <div class="col-sm">
+                <!-- Button create post -->
+                <a asp-action="NewPost" asp-controller="Post" class="btn btn-success px-4 py-2 my-2 w-100">Add New Post</a>
+            </div>
+        </div>
+    </form>
+    <!-- Show user's posts and buttons edit, delete for each post -->
+
+    @{int i = 0;} <!-- #deletePost@(i) for modal pop up window -->
+
+    @foreach (var post in Model.UserPosts)
+    {
+        <div class="my-3">
+            <hr />
+            <div class="row">
+                <div class="col subtext">
+                    <!-- Date of the post -->
+                    Published: @post.Date?.ToString("MM/dd/yyyy")
+                </div>
+                <div class="col subtext">
+                    <!-- Category of the post -->
+                    Category: @post.Category.Name
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm">
+                    <!-- Title of the post -->
+                    <span class="h3">@post.Name</span>
+                </div>
+            </div>
+            <hr />
+            <div class="row" id="content">
+                <div class="col">
+                    <!-- Image of the post -->
+                    <img src="@Url.Action("Image", "PersonalArea", new { id = post.Id })" id="coverImage" class="p-3" />
+                    <!-- Content of the post -->
+                    @post.Content
+                </div>
+            </div>
+            <hr />
+            <div class="row my-4">
+                <div class="col-sm text-right">
+                    <!-- Button edit post -->
+                    <a asp-action="EditPost" asp-controller="Post" asp-route-id="@(post.Id)" class="btn btn-primary px-5 py-2 mx-3">Edit</a>
+                    <!-- Button delete post -->
+                    <a class="btn btn-primary px-5 py-2 text-light" data-toggle="modal" data-target="#deletePost@(i)">Delete</a>
+                </div>
+            </div>
+        </div>
+        <!-- Modal pop up window for button delete-->
+        <div class="modal fade" id="deletePost@(i)" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deletePostLabel">Delete post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="text-center">Are you sure?</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Button close window -->
+                        <button type="button" class="btn btn-secondary px-4 py-2" data-dismiss="modal">Close</button>
+                        <!-- Button confirm deletion of the post -->
+                        <a asp-action="DeletePost" asp-controller="Post" asp-route-id="@(post.Id)" class="btn btn-primary px-4 py-2">Yes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+    <!-- Paginnation -->
+    <div class="my-4">
+        @{
+            var prevDisabled = !Model.UserPosts.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.UserPosts.HasNextPage ? "disabled" : "";
+        }
+        <div class="row">
+            <div class="col text-center">
+                <!-- Button previous post -->
+                <a asp-action="Index" asp-route-pageNumber="@(Model.UserPosts.PageNumber-1)" class="btn btn-secondary px-4 py-2 mx-2 @prevDisabled"> Prev </a>
+                <!-- Button next post -->
+                <a asp-action="Index" asp-route-pageNumber="@(Model.UserPosts.PageNumber+1)" class="btn btn-secondary px-4 py-2 mx-2 @nextDisabled"> Next </a>
+            </div>
+        </div>
+    </div>
+</content>

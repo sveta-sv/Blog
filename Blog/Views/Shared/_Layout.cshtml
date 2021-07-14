@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"> <!-- Show icons-->
+    <link rel="stylesheet" href="~/css/Layout.css" />
+</head>
+<body>
+    <nav class="container navbar-expand-sm navbar-light bg-light">
+        <div class="row">
+            <div class="col-7">
+                <!-- Title of the Blog -->
+                <h1 class="p-2">Talk about Everything</h1>
+            </div>
+            <!-- Humburger menu for mobile screen -->
+            <div class="col text-right align-self-center">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Links Login and Register for desktop and tablet screens -->
+                <div class="desktopMenu">
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Links Login and Register for mobile screen -->
+    <div class="collapse navbar-collapse modileMenu" id="navbarSupportedContent">
+        <partial name="_LoginPartial" />
+    </div>
+    <!-- Content of the web page-->
+    <div class="container">
+        @RenderBody()
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

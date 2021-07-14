@@ -1,0 +1,25 @@
+﻿/* Text area with vertical scrolling */
+#content {
+    min-height: 600px;
+    max-height: 1200px;
+    overflow-y: scroll;
+}
+
+/* Text area with vertical scrolling */
+#description {
+    min-height: 170px;
+    max-height: 600px;
+    overflow-y: scroll;
+}
+
+/* Flowing text around a picture */
+#coverImage {
+    width: 350px;
+    height: auto;
+    float: left;
+}
+
+/* Width of the fields <option>*/
+option{
+    max-width: 70%;
+}

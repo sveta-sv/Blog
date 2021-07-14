@@ -1,0 +1,111 @@
+﻿<!--Model: Posts, UserPosts, Categories -->
+@model Blog.Models.ListPosts
+<!-- Shared components and tab name -->
+@{
+    ViewData["Title"] = "Home";
+    Layout = "_Layout";
+}
+<!-- Styles: #imageOfPost -->
+<link rel="stylesheet" href="~/css/Home.css" />
+
+<!-- Home: login and registration, fields searching, posts -->
+<content>
+    <form asp-action="Index" asp-controller="Home" method="get" class="my-4">
+        <div class="row">
+            <div class="col-sm ">
+                <!-- Filtering by category -->
+                <select name="categoryOfPost" class="form-control my-2">
+                    <option value="">Category</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <!option value="@(category.Value)" @((string)ViewData["FilterByCategory"] == category.Value ? "selected" : "")>@category.Text</!option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm">
+                <!-- Filtering by date -->
+                <input name="dateOfPost" type="date" value="@ViewData["FilterByDate"]" class="form-control my-2" />
+            </div>
+            <div class="col-sm">
+                <!-- Filtering by author -->
+                <input name="authorOfPost" type="text" value="@ViewData["FilterByAuthor"]" placeholder="Author" class="form-control my-2" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <!-- Filtering by title -->
+                <input name="titleOfPost" type="text" value="@ViewData["FilterByTitle"]" placeholder="Title" class="form-control my-2" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <!-- Button search -->
+                <button type="submit" class="btn btn-primary px-4 py-2 w-100 my-2">Search</button>
+            </div>
+            <div class="col-sm">
+                <!-- Button reset -->
+                <a asp-action="Index" asp-controller="Home" class="btn btn-primary px-4 py-2 w-100 my-2">Reset</a>
+            </div>
+        </div>
+    </form>
+    <!-- Show all posts -->
+    @foreach (var post in Model.Posts)
+    {
+        <div class="card my-4">
+            <!-- Title of the post -->
+            <div class="row card-body">
+                <div class="col">
+                    <div class="text-left border-bottom">
+                        <!-- Title of the post -->
+                        <h3>@post.Name</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 text-center">
+                    <!-- Image of the post -->
+                    <img src="@Url.Action("Image", "Home", new { id=post.Id})" id="imageOfPost" class="p-3" />
+                </div>
+                <div class="col-sm">
+                    <div class="text-justify px-3">
+                        <!-- Description of the post -->
+                        @post.Description
+                    </div>
+                    <div class="m-3">
+                        <!-- Button read post -->
+                        <a asp-action="ReadPost" asp-controller="Home" asp-route-id="@post.Id" class="btn btn-success">Read more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row card-body">
+                <div class="col-4 text-center subtext">
+                    <!-- Nickname of the post's author -->
+                    Author: @post.User.Nickname
+                </div>
+                <div class="col-4 text-center subtext">
+                    <!-- Date of publishing the post -->
+                    Published: @post.Date?.ToString("MM/dd/yyyy")
+                </div>
+                <div class="col text-center subtext">
+                    <!-- Category of the post -->
+                    Category: @post.Category.Name
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Paginnation -->
+    <div class="my-4">
+        @{
+            var prevDisabled = !Model.Posts.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.Posts.HasNextPage ? "disabled" : "";
+        }
+        <div class="row">
+            <div class="col text-center">
+                <!-- Button previous post -->
+                <a asp-action="Index" asp-route-pageNumber="@(Model.Posts.PageNumber-1)" class="btn btn-secondary px-4 py-2 mx-2 @prevDisabled"> Prev </a>
+                <!-- Button next post -->
+                <a asp-action="Index" asp-route-pageNumber="@(Model.Posts.PageNumber+1)" class="btn btn-secondary px-4 py-2 mx-2 @nextDisabled"> Next </a>
+            </div>
+        </div>
+    </div>
+</content>

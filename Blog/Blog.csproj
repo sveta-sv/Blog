@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210506144709_AddCategoryEntity.cs" />
+    <Compile Remove="Migrations\20210506144709_AddCategoryEntity.Designer.cs" />
+    <Compile Remove="Migrations\20210506144919_AddCategoryEntity.cs" />
+    <Compile Remove="Migrations\20210506144919_AddCategoryEntity.Designer.cs" />
+    <Compile Remove="Migrations\20210506150442_AddCategoryForeignKeyToPosts.cs" />
+    <Compile Remove="Migrations\20210506150442_AddCategoryForeignKeyToPosts.Designer.cs" />
+    <Compile Remove="Migrations\20210506150958_AddCategoryForeignKeyToPosts.cs" />
+    <Compile Remove="Migrations\20210506150958_AddCategoryForeignKeyToPosts.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Westwind.AspNetCore.Markdown" Version="3.6.0" />
+  </ItemGroup>
+
+</Project>
